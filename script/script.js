@@ -73,6 +73,7 @@ function showContributions(gitData) {
     gitData.forEach(day => {
         const element = document.createElement('div');
         element.classList.add('day');
+        element.innerHTML = `<div class='day-box'></div>`;
 
         if (day.count > 0) {
             if (day.count >= 4) {
@@ -94,14 +95,16 @@ function showContributions(gitData) {
 
         container.append(element);
     });
-
     hoverContributions(gitData);
+    calendarMonths(gitData);
+
 }
 
 function hoverContributions(gitData) {
 
     const containerHover = document.querySelectorAll('.day');
-    const main_container = document.querySelector('.graph');
+    const main_container = document.querySelector('.graph-content');
+
 
     for (let i = 0; i < containerHover.length; i++) {
 
@@ -122,6 +125,32 @@ function hoverContributions(gitData) {
 
         });
     }
+}
+
+
+function calendarMonths(gitArray) {
+    const graph_months = document.querySelector('.graph-months');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    let lastMonth = -1;
+
+    gitArray.forEach((day, index) => {
+        const date = new Date(day.date);
+        const month = date.getMonth();
+        const columnDay = Math.floor(index / 7);
+        if (lastMonth != month) {
+            lastMonth = month;
+            element = document.createElement('span');
+            element.innerHTML = months[month];
+            element.classList.add('month-label');
+            element.style.gridColumnStart = columnDay + 1;
+
+            graph_months.append(element);
+        }
+
+
+
+    });
 }
 
 getContributions();
